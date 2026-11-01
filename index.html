@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11121c">
+  <title>18 mesi di noi · Alexandra & Kimberly</title>
+  <style>
+    :root {
+      --rose: #e9a8bb;
+      --rose-deep: #c9698b;
+      --brown: #8a5b4f;
+      --blue: #6e9bc7;
+      --blue-deep: #355d88;
+      --ink: #171722;
+      --ink-soft: #333544;
+      --cream: #fff8f4;
+      --paper: #fffdfb;
+      --line: rgba(23, 18, 28, .11);
+      --shadow: 0 22px 60px rgba(36, 21, 35, .13);
+      --radius: 26px;
+      --accent: var(--rose-deep);
+      --accent-2: var(--blue-deep);
+      --glow: rgba(233, 168, 187, .45);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(233, 168, 187, .18), transparent 28rem),
+        radial-gradient(circle at 100% 15%, rgba(110, 155, 199, .18), transparent 28rem),
+        var(--cream);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      overflow-x: hidden;
+      transition: background .4s ease, color .4s ease;
+    }
+    body[data-theme="alexandra"] { --accent: var(--rose-deep); --accent-2: var(--brown); --glow: rgba(233, 168, 187, .5); }
+    body[data-theme="kimberly"] { --accent: var(--blue-deep); --accent-2: var(--ink); --glow: rgba(110, 155, 199, .45); }
+    body[data-theme="shared"] { --accent: var(--rose-deep); --accent-2: var(--blue-deep); }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .23;
+      z-index: -1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3, .serif { font-family: Georgia, "Times New Roman", serif; font-weight: 500; }
+    h1 { font-size: clamp(3.2rem, 10vw, 7.8rem); line-height: .92; letter-spacing: -.06em; }
+    h2 { font-size: clamp(2.2rem, 5vw, 4.3rem); line-height: 1; letter-spacing: -.045em; }
+    h3 { font-size: 1.45rem; line-height: 1.1; }
+    p { color: var(--ink-soft); }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+    .intro-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: linear-gradient(135deg, #211b29, #10131d 62%, #1e2739);
+      color: #fff;
+      transition: opacity .8s ease, visibility .8s ease;
+    }
+    .intro-screen.is-open { opacity: 0; visibility: hidden; pointer-events: none; }
+    .intro-orb { position: absolute; border-radius: 50%; filter: blur(2px); pointer-events: none; }
+    .intro-orb.one { width: 30vw; height: 30vw; max-width: 360px; max-height: 360px; background: rgba(233, 168, 187, .22); top: -10%; left: -6%; }
+    .intro-orb.two { width: 34vw; height: 34vw; max-width: 420px; max-height: 420px; background: rgba(110, 155, 199, .2); bottom: -14%; right: -7%; }
+    .intro-inner { max-width: 650px; text-align: center; position: relative; z-index: 1; }
+    .intro-inner h1 { font-size: clamp(3.6rem, 11vw, 7rem); margin: 18px 0 16px; }
+    .eyebrow { text-transform: uppercase; letter-spacing: .2em; font-size: .7rem; font-weight: 700; color: var(--accent); }
+    .intro-screen .eyebrow { color: #f5cad7; }
+    .intro-copy { color: rgba(255,255,255,.74); max-width: 470px; margin: 0 auto 28px; }
+    .envelope-button { border: 0; background: none; color: #fff; display: grid; justify-items: center; gap: 12px; margin: 0 auto; }
+    .envelope { width: 180px; height: 118px; position: relative; margin: 12px auto 0; filter: drop-shadow(0 18px 25px rgba(0,0,0,.22)); transition: transform .25s ease; }
+    .envelope-button:hover .envelope, .envelope-button:focus-visible .envelope { transform: translateY(-7px) rotate(-1deg); }
+    .envelope-back { position: absolute; inset: 0; border-radius: 10px; background: linear-gradient(145deg, #f2b4c6, #a96769); }
+    .envelope-back::before, .envelope-back::after { content: ""; position: absolute; bottom: 0; width: 0; height: 0; border-style: solid; }
+    .envelope-back::before { left: 0; border-width: 0 0 72px 90px; border-color: transparent transparent rgba(128, 69, 71, .7) transparent; }
+    .envelope-back::after { right: 0; border-width: 72px 0 0 90px; border-color: transparent transparent transparent rgba(255, 224, 229, .66); }
+    .envelope-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 90px solid transparent; border-right: 90px solid transparent; border-top: 64px solid #f6c5d2; transform-origin: top; transition: transform .6s ease; z-index: 2; }
+    .envelope-seal { position: absolute; z-index: 3; top: 46px; left: 50%; transform: translateX(-50%); width: 33px; height: 33px; border-radius: 50%; display: grid; place-items: center; background: #8a3f56; color: #ffd9e4; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,.18); }
+    .envelope-button:hover .envelope-flap { transform: rotateX(22deg); }
+    .envelope-label { font-size: .88rem; letter-spacing: .12em; text-transform: uppercase; color: #ffe4ec; }
+
+    .progress { position: fixed; z-index: 30; top: 0; left: 0; height: 4px; width: 0; background: linear-gradient(90deg, var(--rose-deep), var(--blue-deep)); transition: width .1s linear; }
+    .nav { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 18px; width: min(1180px, calc(100% - 36px)); margin: 18px auto 0; padding: 12px 14px 12px 20px; background: rgba(255,253,251,.78); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.7); border-radius: 99px; box-shadow: 0 8px 30px rgba(40, 24, 35, .08); }
+    .nav-brand { font-family: Georgia, serif; font-size: 1.12rem; white-space: nowrap; }
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 4px; align-items: center; overflow-x: auto; scrollbar-width: none; }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-links a { padding: 7px 9px; font-size: .76rem; color: #676170; white-space: nowrap; border-radius: 99px; transition: background .2s, color .2s; }
+    .nav-links a:hover { color: var(--ink); background: rgba(233,168,187,.16); }
+    .theme-button, .icon-button { border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 99px; padding: 8px 12px; font-size: .76rem; white-space: nowrap; }
+    .theme-button:hover, .icon-button:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+    main { width: min(1180px, calc(100% - 36px)); margin: 0 auto; }
+    .hero { min-height: 78vh; display: grid; align-items: center; position: relative; padding: 88px 0 72px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(32px, 8vw, 110px); align-items: center; }
+    .hero h1 { max-width: 720px; margin: 18px 0 24px; }
+    .hero h1 em { color: var(--accent); font-style: normal; }
+    .hero-lead { font-size: 1.1rem; max-width: 590px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .primary-button, .secondary-button { display: inline-flex; justify-content: center; align-items: center; gap: 9px; border-radius: 99px; padding: 13px 18px; border: 1px solid transparent; font-weight: 700; font-size: .9rem; transition: transform .2s, box-shadow .2s, background .2s; }
+    .primary-button { color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 11px 25px var(--glow); }
+    .secondary-button { color: var(--ink); background: rgba(255,255,255,.62); border-color: var(--line); }
+    .primary-button:hover, .secondary-button:hover { transform: translateY(-2px); }
+    .hero-art { min-height: 430px; display: grid; place-items: center; position: relative; }
+    .hero-art::before { content: ""; position: absolute; width: min(430px, 80vw); aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(233,168,187,.45), rgba(110,155,199,.13) 55%, transparent 68%); filter: blur(2px); }
+    .hero-card { position: relative; width: min(360px, 85%); padding: 36px 32px 32px; background: linear-gradient(145deg, rgba(255,253,251,.9), rgba(255,243,240,.8)); border: 1px solid rgba(255,255,255,.95); border-radius: 30px; box-shadow: var(--shadow); transform: rotate(3deg); }
+    .hero-card::after { content: ""; position: absolute; inset: 14px; border: 1px dashed rgba(138,91,79,.25); border-radius: 22px; pointer-events: none; }
+    .hero-card-top { position: relative; z-index: 1; display: flex; justify-content: space-between; color: var(--accent); font-size: .8rem; }
+    .hero-card h2 { position: relative; z-index: 1; font-size: 3.2rem; margin: 46px 0 12px; }
+    .hero-card p { position: relative; z-index: 1; font-family: Georgia, serif; font-style: italic; font-size: 1.18rem; color: var(--brown); }
+    .hero-card .card-bottom { position: relative; z-index: 1; margin-top: 50px; display: flex; justify-content: space-between; align-items: end; font-size: .78rem; }
+    .heart-float { position: absolute; color: var(--accent); animation: drift 5s ease-in-out infinite; font-size: 1.6rem; }
+    .heart-float.a { top: 7%; right: 8%; animation-delay: -.7s; }
+    .heart-float.b { bottom: 10%; left: 5%; color: var(--blue-deep); animation-delay: -2.2s; font-size: 1.1rem; }
+    .heart-float.c { top: 16%; left: 8%; color: var(--brown); animation-delay: -3.3s; font-size: .9rem; }
+    @keyframes drift { 0%,100% { transform: translateY(0) rotate(-8deg); } 50% { transform: translateY(-17px) rotate(9deg); } }
+
+    section { padding: 84px 0; scroll-margin-top: 100px; }
+    .section-heading { max-width: 750px; margin-bottom: 34px; }
+    .section-heading h2 { margin: 10px 0 14px; }
+    .section-heading p { font-size: 1.03rem; }
+    .section-heading.center { text-align: center; margin-left: auto; margin-right: auto; }
+    .soft-panel { padding: clamp(22px, 4vw, 42px); border: 1px solid rgba(255,255,255,.9); background: rgba(255,253,251,.62); border-radius: var(--radius); box-shadow: 0 14px 45px rgba(45, 27, 42, .06); }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 32px; max-width: 620px; }
+    .stat { padding: 18px; border-radius: 18px; background: rgba(255,255,255,.56); border: 1px solid var(--line); }
+    .stat strong { display: block; font-family: Georgia, serif; font-size: 2rem; color: var(--accent); line-height: 1; margin-bottom: 5px; }
+    .stat span { color: #6b6570; font-size: .8rem; }
+
+    .album-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
+    .toolbar-note { color: #756c77; font-size: .82rem; }
+    .months-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .month-card { position: relative; overflow: hidden; min-height: 420px; display: flex; flex-direction: column; background: var(--paper); border: 1px solid rgba(23,18,28,.08); border-radius: 22px; box-shadow: 0 13px 35px rgba(37, 24, 37, .07); transition: transform .22s, box-shadow .22s; }
+    .month-card:hover { transform: translateY(-4px) rotate(-.35deg); box-shadow: 0 22px 45px rgba(37, 24, 37, .12); }
+    .month-photo { position: relative; height: 206px; overflow: hidden; background: linear-gradient(135deg, rgba(233,168,187,.75), rgba(110,155,199,.76)); display: grid; place-items: center; }
+    .month-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,.2), transparent 50%); pointer-events: none; }
+    .month-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-placeholder { position: relative; z-index: 1; color: #fff; text-align: center; padding: 20px; text-shadow: 0 2px 15px rgba(0,0,0,.22); }
+    .photo-placeholder strong { display: block; font-family: Georgia, serif; font-size: 2.8rem; line-height: 1; }
+    .photo-placeholder span { display: block; margin-top: 8px; font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; }
+    .month-content { padding: 20px 20px 18px; display: flex; flex-direction: column; flex: 1; }
+    .month-kicker { color: var(--accent); font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 800; }
+    .month-content h3 { margin: 8px 0 10px; }
+    .month-memory { font-size: .9rem; margin-bottom: 12px; }
+    blockquote { margin: auto 0 15px; padding: 10px 0 0 14px; border-left: 2px solid var(--rose); font-family: Georgia, serif; font-style: italic; color: #70576a; font-size: .93rem; }
+    .small-button { border: 1px solid var(--line); background: transparent; color: var(--accent-2); border-radius: 99px; padding: 7px 10px; font-size: .74rem; font-weight: 700; align-self: flex-start; }
+    .small-button:hover { background: rgba(233,168,187,.13); border-color: var(--accent); }
+
+    .trip-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .trip-card { min-height: 450px; perspective: 1200px; position: relative; }
+    .trip-inner { position: relative; width: 100%; height: 100%; min-height: 450px; transition: transform .7s cubic-bezier(.2,.7,.2,1); transform-style: preserve-3d; }
+    .trip-card.flipped .trip-inner { transform: rotateY(180deg); }
+    .trip-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 26px; overflow: hidden; border: 1px solid rgba(255,255,255,.9); box-shadow: var(--shadow); }
+    .trip-front { display: flex; flex-direction: column; justify-content: end; padding: 26px; color: #fff; background: linear-gradient(160deg, #c17f97, #6b4a4c 55%, #2d3d57); }
+    .trip-front::before { content: ""; position: absolute; inset: 0; opacity: .6; background: radial-gradient(circle at 20% 15%, rgba(255,255,255,.65) 0 2px, transparent 3px), radial-gradient(circle at 78% 24%, rgba(255,255,255,.6) 0 2px, transparent 3px), linear-gradient(135deg, transparent 46%, rgba(255,255,255,.12) 47% 48%, transparent 49%); background-size: auto, auto, 35px 35px; }
+    .trip-front.has-photo { background-size: cover; background-position: center; }
+    .trip-front.has-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(18,17,25,.84), transparent 64%); }
+    .trip-front-content { position: relative; z-index: 2; }
+    .trip-front .eyebrow { color: #ffe0e8; }
+    .trip-front h3 { font-size: clamp(2.2rem, 5vw, 4rem); margin: 12px 0 4px; }
+    .trip-front p { color: rgba(255,255,255,.82); margin-bottom: 0; }
+    .trip-back { transform: rotateY(180deg); background: var(--paper); padding: 28px; display: flex; flex-direction: column; justify-content: center; }
+    .trip-back h3 { color: var(--accent-2); margin: 12px 0; }
+    .trip-back p { font-size: 1.02rem; }
+    .flip-hint { position: absolute; right: 20px; top: 18px; z-index: 3; padding: 7px 10px; color: #fff; background: rgba(0,0,0,.22); border: 1px solid rgba(255,255,255,.35); border-radius: 99px; font-size: .7rem; }
+    .trip-edit { position: absolute; right: 18px; bottom: 18px; z-index: 4; }
+
+    .reasons-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+    .reason-card { min-height: 126px; border: 1px solid var(--line); background: rgba(255,255,255,.65); border-radius: 18px; padding: 15px; text-align: left; transition: transform .2s, background .2s; }
+    .reason-card:hover { transform: translateY(-4px) rotate(1deg); background: #fff; }
+    .reason-card .number { font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); font-weight: 800; }
+    .reason-card .reason-cover { display: grid; min-height: 70px; place-items: center; margin-top: 10px; color: var(--accent-2); font-size: .78rem; font-weight: 800; text-align: center; }
+    .reason-card p { opacity: 0; visibility: hidden; transform: translateY(6px); transition: opacity .25s, transform .25s, visibility .25s; font-family: Georgia, serif; font-size: 1rem; line-height: 1.25; margin: 11px 0 0; color: #4a3d4a; }
+    .reason-card.is-open .reason-cover { display: none; }
+    .reason-card.is-open p { opacity: 1; visibility: visible; transform: translateY(0); }
+
+    .play-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 24px; align-items: start; }
+    .quiz-card, .puzzle-card, .jar-card, .soundtrack-card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; box-shadow: 0 13px 35px rgba(37, 24, 37, .06); }
+    .quiz-card h3, .puzzle-card h3, .jar-card h3, .soundtrack-card h3 { margin: 8px 0 10px; }
+    .quiz-count { color: var(--accent); font-size: .74rem; font-weight: 800; text-transform: uppercase; letter-spacing: .14em; }
+    .quiz-question { font-family: Georgia, serif; font-size: 1.65rem; line-height: 1.12; margin: 18px 0; }
+    .quiz-options { display: grid; gap: 9px; }
+    .quiz-option { text-align: left; border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 12px 14px; border-radius: 14px; transition: border .2s, transform .2s, background .2s; }
+    .quiz-option:hover { border-color: var(--accent); transform: translateX(3px); }
+    .quiz-option.correct { background: #eef6ef; border-color: #76a783; }
+    .quiz-option.wrong { background: #fff0f1; border-color: #d58a9b; }
+    .quiz-feedback { min-height: 27px; color: #735870; font-size: .86rem; margin: 12px 0 0; }
+    .quiz-next { margin-top: 14px; display: none; }
+    .quiz-result { text-align: center; padding: 18px 6px 6px; }
+    .quiz-result strong { display: block; font-family: Georgia, serif; font-size: 3rem; color: var(--accent); }
+
+    .puzzle-wrap { display: grid; grid-template-columns: minmax(150px, 250px) 1fr; gap: 18px; align-items: center; }
+    .puzzle-grid { width: min(250px, 100%); aspect-ratio: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; background: #191923; border-radius: 16px; overflow: hidden; }
+    .puzzle-tile { border: 0; min-width: 0; min-height: 0; border-radius: 7px; background: linear-gradient(135deg, var(--rose), var(--blue)); color: #fff; font-weight: 800; font-size: 1.1rem; background-size: 300% 300%; transition: transform .15s, filter .15s; }
+    .puzzle-tile:not(.empty):hover { filter: brightness(1.12); transform: scale(.97); }
+    .puzzle-tile.empty { background: #272a38; cursor: default; }
+    .puzzle-help { font-size: .85rem; }
+    .upload-label { display: inline-flex; align-items: center; justify-content: center; border: 1px dashed var(--accent); border-radius: 99px; padding: 9px 12px; color: var(--accent-2); font-size: .78rem; font-weight: 700; cursor: pointer; margin-top: 8px; }
+    .upload-label:hover { background: rgba(233,168,187,.12); }
+    #puzzleUpload { display: none; }
+    .puzzle-status { font-size: .8rem; color: var(--accent-2); margin-top: 12px; min-height: 22px; }
+
+    .jar-area { min-height: 220px; display: grid; place-items: center; position: relative; }
+    .jar { position: relative; width: 130px; height: 155px; border: 4px solid rgba(110, 155, 199, .65); border-radius: 22px 22px 34px 34px; background: linear-gradient(100deg, rgba(255,255,255,.58), rgba(205,229,244,.3)); box-shadow: inset -12px 0 rgba(255,255,255,.2), 0 15px 26px rgba(60, 93, 123, .13); }
+    .jar::before { content: ""; position: absolute; top: -17px; left: 14px; right: 14px; height: 20px; border-radius: 7px; background: var(--blue-deep); box-shadow: 0 5px 0 rgba(20, 45, 75, .17); }
+    .jar .mini-note { position: absolute; width: 35px; height: 19px; border-radius: 4px; background: #f7c5d3; transform: rotate(-15deg); left: 25px; top: 63px; }
+    .jar .mini-note:nth-child(2) { background: #eddfbd; transform: rotate(18deg); left: 61px; top: 47px; }
+    .jar .mini-note:nth-child(3) { background: #9bbcdf; transform: rotate(6deg); left: 42px; top: 100px; }
+    .drawn-memory { margin: 0; min-height: 62px; padding: 16px; text-align: center; background: rgba(233,168,187,.12); border-radius: 16px; font-family: Georgia, serif; color: #644b61; font-style: italic; }
+
+    .soundtrack { margin-top: 24px; }
+    .track-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+    .track { border: 1px solid var(--line); border-radius: 17px; padding: 16px; background: linear-gradient(135deg, rgba(233,168,187,.1), rgba(110,155,199,.1)); cursor: pointer; transition: transform .2s, background .2s; }
+    .track:hover { transform: translateY(-3px); background: rgba(255,255,255,.8); }
+    .track-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: #fff; margin-bottom: 12px; }
+    .track strong { display: block; font-family: Georgia, serif; font-size: 1.05rem; }
+    .track span { display: block; color: #756c77; font-size: .8rem; margin-top: 4px; }
+    .track-reveal { display: none; margin-top: 10px; color: #6e5267; font-size: .82rem; }
+    .track.open .track-reveal { display: block; }
+
+    .scratch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .scratch-card { min-height: 155px; position: relative; overflow: hidden; border-radius: 20px; background: #fff1f4; border: 1px solid rgba(201,105,139,.2); box-shadow: 0 10px 24px rgba(37,24,37,.06); }
+    .scratch-message { height: 100%; min-height: 155px; display: grid; place-items: center; padding: 22px; text-align: center; font-family: Georgia, serif; font-size: 1.25rem; color: #704c61; }
+    .scratch-canvas { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; transition: opacity .45s ease; }
+    .scratch-label { position: absolute; z-index: 3; top: 10px; left: 50%; transform: translateX(-50%); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.85); pointer-events: none; }
+    .scratch-note { margin-top: 14px; color: #7a6e79; font-size: .83rem; }
+
+    .secret-area { position: relative; min-height: 80px; margin-top: 30px; border-top: 1px dashed rgba(23,18,28,.15); padding-top: 20px; }
+    .secret-area p { text-align: center; font-size: .83rem; }
+    .secret-heart { position: absolute; border: 0; background: none; color: rgba(201,105,139,.55); font-size: 1.2rem; padding: 5px; transition: transform .25s, color .25s; }
+    .secret-heart:hover, .secret-heart.found { color: var(--accent); transform: scale(1.35) rotate(10deg); }
+    .secret-heart.s1 { top: 2px; left: 7%; }
+    .secret-heart.s2 { top: 19px; right: 15%; color: rgba(110,155,199,.65); }
+    .secret-heart.s3 { top: 45px; left: 23%; color: rgba(138,91,79,.58); }
+    .secret-heart.s4 { top: 35px; right: 38%; }
+    .secret-heart.s5 { top: 6px; right: 3%; color: rgba(110,155,199,.65); }
+    .secret-count { color: var(--accent); font-weight: 800; }
+
+    .future-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .future-card { min-height: 210px; padding: 22px; border-radius: 20px; background: linear-gradient(145deg, #fff, rgba(233,168,187,.16)); border: 1px solid var(--line); position: relative; overflow: hidden; transition: transform .2s; }
+    .future-card:nth-child(2) { background: linear-gradient(145deg, #fff, rgba(110,155,199,.16)); }
+    .future-card:nth-child(3) { background: linear-gradient(145deg, #fff, rgba(138,91,79,.15)); }
+    .future-card:hover { transform: translateY(-4px); }
+    .future-lock { position: absolute; right: 18px; top: 16px; font-size: 1.5rem; }
+    .future-card h3 { margin-top: 35px; }
+    .future-content { display: none; color: #6a5368; font-family: Georgia, serif; font-style: italic; }
+    .future-card.open .future-content { display: block; }
+    .future-card.open .future-lock { transform: rotate(15deg); }
+    .future-card.open h3 { color: var(--accent-2); }
+
+    .finale { position: relative; padding-bottom: 120px; }
+    .final-box { text-align: center; overflow: hidden; position: relative; padding: clamp(34px, 6vw, 70px) 24px; border-radius: 34px; background: linear-gradient(145deg, #201b28, #101826); color: #fff; box-shadow: 0 28px 65px rgba(30, 22, 36, .2); }
+    .final-box::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 18% 0%, rgba(233,168,187,.35), transparent 34%), radial-gradient(circle at 90% 100%, rgba(110,155,199,.36), transparent 38%); pointer-events: none; }
+    .final-box > * { position: relative; z-index: 1; }
+    .final-box h2 { max-width: 760px; margin: 10px auto 17px; font-size: clamp(2.6rem, 6vw, 5.2rem); }
+    .final-box p { max-width: 560px; margin-left: auto; margin-right: auto; color: rgba(255,255,255,.74); }
+    .choice-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 27px 0 18px; }
+    .choice-button { border: 1px solid rgba(255,255,255,.24); border-radius: 99px; padding: 11px 15px; background: rgba(255,255,255,.08); color: #fff; font-size: .83rem; transition: background .2s, transform .2s; }
+    .choice-button:hover { background: rgba(255,255,255,.17); transform: translateY(-2px); }
+    .ending-message { min-height: 28px; color: #ffd7e3; font-family: Georgia, serif; font-style: italic; font-size: 1.1rem; }
+    .final-reveal { display: none; margin: 26px auto 0; max-width: 610px; padding: 22px; border: 1px solid rgba(255,255,255,.18); border-radius: 22px; background: rgba(255,255,255,.07); animation: reveal .7s ease both; }
+    .final-reveal.show { display: block; }
+    .final-reveal h3 { color: #ffd7e3; font-size: 2rem; margin-bottom: 12px; }
+    .final-reveal p { color: rgba(255,255,255,.82); }
+    .signature { font-family: Georgia, serif; font-size: 1.25rem; color: #fff; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+    footer { padding: 0 0 35px; text-align: center; color: #827583; font-size: .78rem; }
+    footer strong { color: var(--accent); }
+    .toast { position: fixed; z-index: 60; left: 50%; bottom: 24px; transform: translate(-50%, 30px); opacity: 0; pointer-events: none; color: #fff; background: #211b29; border: 1px solid rgba(255,255,255,.15); border-radius: 99px; padding: 11px 16px; font-size: .82rem; box-shadow: 0 14px 30px rgba(0,0,0,.2); transition: opacity .3s, transform .3s; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .celebration { position: fixed; inset: 0; z-index: 55; pointer-events: none; overflow: hidden; }
+    .celebration span { position: absolute; bottom: -30px; font-size: 1.6rem; animation: celebrate 3.8s ease-out forwards; }
+    @keyframes celebrate { 0% { opacity: 0; transform: translateY(0) scale(.6) rotate(0); } 12% { opacity: 1; } 100% { opacity: 0; transform: translateY(-105vh) scale(1.25) rotate(420deg); } }
+
+    .modal-backdrop { position: fixed; inset: 0; z-index: 70; display: none; place-items: center; padding: 18px; background: rgba(20, 17, 26, .58); backdrop-filter: blur(8px); }
+    .modal-backdrop.open { display: grid; }
+    .modal { width: min(620px, 100%); max-height: min(760px, calc(100vh - 36px)); overflow-y: auto; background: var(--paper); border-radius: 26px; padding: 26px; box-shadow: 0 30px 80px rgba(0,0,0,.25); }
+    .modal-head { display: flex; justify-content: space-between; gap: 18px; align-items: start; }
+    .modal-head h2 { font-size: 2.2rem; margin: 0; }
+    .close-button { border: 0; border-radius: 50%; width: 36px; height: 36px; background: rgba(23,18,28,.07); color: var(--ink); font-size: 1.2rem; }
+    .form-row { display: grid; gap: 7px; margin-top: 16px; }
+    .form-row label { font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; color: var(--accent-2); }
+    .form-row input, .form-row textarea { width: 100%; border: 1px solid var(--line); border-radius: 13px; padding: 11px 12px; background: #fff; color: var(--ink); outline: none; }
+    .form-row textarea { min-height: 90px; resize: vertical; }
+    .form-row input:focus, .form-row textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow); }
+    .editor-preview { height: 120px; margin-top: 12px; border-radius: 16px; display: grid; place-items: center; overflow: hidden; background: linear-gradient(135deg, rgba(233,168,187,.7), rgba(110,155,199,.65)); color: #fff; }
+    .editor-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-actions { display: flex; justify-content: end; gap: 10px; margin-top: 22px; }
+
+    @media (max-width: 930px) {
+      .hero-grid, .play-grid { grid-template-columns: 1fr; }
+      .hero-art { min-height: 360px; }
+      .months-grid { grid-template-columns: repeat(2, 1fr); }
+      .reasons-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 680px) {
+      .nav { width: calc(100% - 20px); margin-top: 10px; padding-left: 14px; }
+      .nav-brand { font-size: .95rem; }
+      .nav-links { display: none; }
+      main { width: min(100% - 24px, 1180px); }
+      section { padding: 58px 0; }
+      .hero { min-height: 76vh; padding: 52px 0 42px; }
+      .hero-art { min-height: 290px; }
+      .hero-card { width: min(330px, 92%); }
+      .stats { gap: 8px; }
+      .stat { padding: 13px 10px; }
+      .stat strong { font-size: 1.55rem; }
+      .stat span { font-size: .7rem; }
+      .months-grid, .trip-grid, .future-grid, .scratch-grid, .track-list { grid-template-columns: 1fr; }
+      .month-card { min-height: 390px; }
+      .reasons-grid { grid-template-columns: repeat(2, 1fr); }
+      .puzzle-wrap { grid-template-columns: 1fr; }
+      .puzzle-grid { margin: auto; }
+      .puzzle-help { text-align: center; }
+      .upload-label { margin-left: auto; margin-right: auto; }
+      .trip-card, .trip-inner { min-height: 405px; }
+      .soft-panel { padding: 22px 16px; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .primary-button, .secondary-button { width: 100%; }
+    }
+  </style>
+</head>
+<body data-theme="shared">
+  <div class="intro-screen" id="introScreen" aria-modal="true" role="dialog" aria-label="Apri la lettera">
+    <div class="intro-orb one"></div><div class="intro-orb two"></div>
+    <div class="intro-inner">
+      <div class="eyebrow">Una lettera per Alexandra</div>
+      <h1>18 mesi<br><em>di noi</em></h1>
+      <p class="intro-copy">Una piccola esperienza da attraversare con calma, un ricordo alla volta. Kimberly l'ha preparata pensando a voi due.</p>
+      <button class="envelope-button" id="openLetter" type="button">
+        <span class="envelope" aria-hidden="true"><span class="envelope-back"></span><span class="envelope-flap"></span><span class="envelope-seal">♥</span></span>
+        <span class="envelope-label">Apri la lettera</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="progress" id="scrollProgress"></div>
+  <nav class="nav" aria-label="Navigazione principale">
+    <a class="nav-brand" href="#hero">A <span>♥</span> K</a>
+    <div class="nav-links">
+      <a href="#storia">La storia</a><a href="#viaggi">Viaggi</a><a href="#motivi">18 motivi</a><a href="#giochi">Giochi</a><a href="#futuro">Futuro</a>
+    </div>
+    <button class="theme-button" id="themeButton" type="button">Tema condiviso</button>
+  </nav>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Per Alexandra · da Kimberly</div>
+          <h1>Il tempo è più bello quando è <em>nostro.</em></h1>
+          <p class="hero-lead">Un anno e sei mesi di risate, viaggi estivi, piccole abitudini e momenti che meritano di essere tenuti stretti. Questa non è solo una lettera: è un posto tutto vostro.</p>
+          <div class="hero-actions">
+            <a class="primary-button" href="#storia">Inizia il viaggio <span>↓</span></a>
+            <a class="secondary-button" href="#motivi">Scopri una cosa di te <span>♥</span></a>
+          </div>
+          <div class="stats" aria-label="Numeri della vostra storia">
+            <div class="stat"><strong>18</strong><span>mesi insieme</span></div>
+            <div class="stat"><strong>2</strong><span>viaggi d'estate</span></div>
+            <div class="stat"><strong>∞</strong><span>cose ancora da vivere</span></div>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <span class="heart-float a">♥</span><span class="heart-float b">✦</span><span class="heart-float c">♥</span>
+          <div class="hero-card">
+            <div class="hero-card-top"><span>01 / 18</span><span>Alexandra + Kimberly</span></div>
+            <h2>noi<br>due</h2>
+            <p>“La mia parte preferita di ogni giorno è quella in cui ci sei tu.”</p>
+            <div class="card-bottom"><span>con amore</span><span>♥</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="storia">
+      <div class="section-heading">
+        <div class="eyebrow">Capitolo uno</div>
+        <h2>La nostra storia,<br><em>mese dopo mese.</em></h2>
+        <p>Diciotto piccoli capitoli per non lasciare indietro nessun dettaglio. Clicca su <strong>Personalizza</strong> per aggiungere una foto, il vostro ricordo e la tua dedica per ogni mese.</p>
+      </div>
+      <div class="soft-panel">
+        <div class="album-toolbar">
+          <span class="toolbar-note">Le foto e i testi che aggiungi restano salvati in questo browser.</span>
+          <button class="secondary-button" id="resetLetter" type="button">Ripristina testi demo</button>
+        </div>
+        <div class="months-grid" id="monthsGrid"></div>
+      </div>
+    </section>
+
+    <section id="viaggi">
+      <div class="section-heading center">
+        <div class="eyebrow">Capitolo due</div>
+        <h2>Due estati,<br><em>infiniti ricordi.</em></h2>
+        <p>Girate le cartoline per rivivere i vostri due viaggi. Puoi personalizzarle con il luogo, una foto e quella cosa che ancora vi fa sorridere.</p>
+      </div>
+      <div class="trip-grid" id="tripsGrid"></div>
+    </section>
+
+    <section id="motivi">
+      <div class="section-heading">
+        <div class="eyebrow">Capitolo tre</div>
+        <h2>18 motivi per cui<br><em>ti sceglierei ancora.</em></h2>
+        <p>Uno per ogni mese. Alcuni sono grandi, altri minuscoli: proprio come le cose belle che fanno una storia.</p>
+      </div>
+      <div class="reasons-grid" id="reasonsGrid"></div>
+    </section>
+
+    <section id="giochi">
+      <div class="section-heading">
+        <div class="eyebrow">Capitolo quattro</div>
+        <h2>Adesso si gioca<br><em>un po' con il cuore.</em></h2>
+        <p>Un quiz, un puzzle, un barattolo di ricordi e una piccola playlist: perché l'amore è anche ridere, indovinare e fare cose insieme.</p>
+      </div>
+      <div class="play-grid">
+        <div class="quiz-card" id="quizCard">
+          <div class="quiz-count" id="quizCount">Domanda 1 di 4</div>
+          <h3>Quanto conosci il vostro “noi”?</h3>
+          <div class="quiz-question" id="quizQuestion"></div>
+          <div class="quiz-options" id="quizOptions"></div>
+          <div class="quiz-feedback" id="quizFeedback" aria-live="polite"></div>
+          <button class="primary-button quiz-next" id="quizNext" type="button">Prossima domanda →</button>
+          <div class="quiz-result" id="quizResult" hidden></div>
+        </div>
+        <div class="puzzle-card">
+          <div class="eyebrow">Puzzle fotografico</div>
+          <h3>Ricomponi un vostro momento</h3>
+          <div class="puzzle-wrap">
+            <div class="puzzle-grid" id="puzzleGrid" aria-label="Puzzle fotografico"></div>
+            <div class="puzzle-help">
+              <p>Carica una vostra foto e poi sposta le tessere finché il ricordo torna intero.</p>
+              <label class="upload-label" for="puzzleUpload">＋ Scegli una foto</label>
+              <input id="puzzleUpload" type="file" accept="image/*">
+              <div class="puzzle-status" id="puzzleStatus">Il puzzle è pronto per voi.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="soft-panel soundtrack">
+        <div class="eyebrow">La colonna sonora</div>
+        <h3>Tre canzoni per tre versioni di voi</h3>
+        <p>Sostituisci i titoli demo con le vostre canzoni. Tocca ogni scheda per rivelare la dedica.</p>
+        <div class="track-list">
+          <div class="track"><div class="track-icon">▶</div><strong>La canzone dell'inizio</strong><span>Quella che sa di prime volte</span><div class="track-reveal">“Ogni volta che parte, mi ricorda quando tutto stava appena cominciando.”</div></div>
+          <div class="track"><div class="track-icon">♪</div><strong>La canzone dei viaggi</strong><span>Quella da cantare in macchina</span><div class="track-reveal">“La nostra voce stonata è comunque una delle mie armonie preferite.”</div></div>
+          <div class="track"><div class="track-icon">♥</div><strong>La canzone del futuro</strong><span>Quella che non abbiamo ancora scelto</span><div class="track-reveal">“Perché la parte migliore deve ancora essere scritta.”</div></div>
+        </div>
+      </div>
+      <div class="play-grid" style="margin-top:24px;">
+        <div class="jar-card">
+          <div class="eyebrow">Barattolo dei ricordi</div>
+          <h3>Pesca un bigliettino</h3>
+          <p>Ogni clic tira fuori una frase da conservare o trasformare in un nuovo ricordo.</p>
+          <div class="jar-area"><div class="jar" aria-hidden="true"><span class="mini-note"></span><span class="mini-note"></span><span class="mini-note"></span></div></div>
+          <button class="primary-button" id="drawMemory" type="button">Pesca un ricordo ✦</button>
+          <p class="drawn-memory" id="drawnMemory">Qui apparirà il prossimo bigliettino.</p>
+        </div>
+        <div class="soft-panel">
+          <div class="eyebrow">Una pausa dolce</div>
+          <h3>Le piccole cose sono grandi cose.</h3>
+          <p>Fate una foto insieme oggi, scegliete una canzone per questo mese e lasciate una nuova frase nel barattolo. Tra un anno sarà un altro capitolo da aggiungere qui.</p>
+          <button class="secondary-button" id="addTodayMemory" type="button">Scrivi un messaggio per oggi</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="sorpresa">
+      <div class="section-heading center">
+        <div class="eyebrow">Capitolo cinque</div>
+        <h2>Gratta, trova,<br><em>scopri.</em></h2>
+        <p>Tre messaggi segreti e cinque cuori nascosti. Alcune cose belle chiedono solo un piccolo gesto per venire fuori.</p>
+      </div>
+      <div class="scratch-grid">
+        <div class="scratch-card"><div class="scratch-message">Ti sceglierei anche nei giorni storti.</div><canvas class="scratch-canvas" aria-label="Gratta per scoprire il messaggio"></canvas><span class="scratch-label">gratta qui</span></div>
+        <div class="scratch-card"><div class="scratch-message">Il mio posto preferito è accanto a te.</div><canvas class="scratch-canvas" aria-label="Gratta per scoprire il messaggio"></canvas><span class="scratch-label">gratta qui</span></div>
+        <div class="scratch-card"><div class="scratch-message">Il prossimo viaggio? Ovunque, se ci sei tu.</div><canvas class="scratch-canvas" aria-label="Gratta per scoprire il messaggio"></canvas><span class="scratch-label">gratta qui</span></div>
+      </div>
+      <p class="scratch-note" style="text-align:center;">Usa il dito sul telefono o il mouse per scoprire i messaggi.</p>
+      <div class="secret-area">
+        <p>Cerca i cuori nascosti nella pagina · trovati: <span class="secret-count" id="secretCount">0/5</span></p>
+        <button class="secret-heart s1" data-secret="Hai trovato il primo: sei bravissima a trovare le cose belle." aria-label="Cuore segreto 1">♡</button>
+        <button class="secret-heart s2" data-secret="Un piccolo cuore per una grande complicità." aria-label="Cuore segreto 2">♡</button>
+        <button class="secret-heart s3" data-secret="Segreto numero tre: Kimberly ti ama tantissimo." aria-label="Cuore segreto 3">♡</button>
+        <button class="secret-heart s4" data-secret="Quarto cuore trovato. Manca ancora una sorpresa." aria-label="Cuore segreto 4">♡</button>
+        <button class="secret-heart s5" data-secret="Li hai trovati tutti. Ora il finale è pronto per te." aria-label="Cuore segreto 5">♡</button>
+      </div>
+    </section>
+
+    <section id="futuro">
+      <div class="section-heading">
+        <div class="eyebrow">Capitolo sei</div>
+        <h2>Una capsula<br><em>per il futuro.</em></h2>
+        <p>Tre promesse da aprire quando vuoi. Non sono frasi perfette: sono piccoli modi per dirti che ci sarò.</p>
+      </div>
+      <div class="future-grid">
+        <button class="future-card" type="button"><span class="future-lock">🔒</span><h3>Una cosa che voglio vivere con te</h3><p class="future-content">Riempire ancora tante estati di strade nuove, foto mosse, risate improvvise e mani che si cercano.</p></button>
+        <button class="future-card" type="button"><span class="future-lock">🔒</span><h3>Una promessa piccola</h3><p class="future-content">Continuare a scegliere noi anche nelle giornate normali, perché spesso è lì che si nasconde la magia.</p></button>
+        <button class="future-card" type="button"><span class="future-lock">🔒</span><h3>Un desiderio per noi</h3><p class="future-content">Aggiungere così tanti capitoli che 18 mesi, un giorno, sembreranno soltanto l'inizio.</p></button>
+      </div>
+    </section>
+
+    <section class="finale" id="finale">
+      <div class="final-box">
+        <div class="eyebrow" style="color:#f7bdcf;">L'ultima pagina, per ora</div>
+        <h2>Sei pronta per il<br><em>messaggio finale?</em></h2>
+        <p>Scegli un finale e poi apri la dedica che Kimberly ha lasciato per te.</p>
+        <div class="choice-row">
+          <button class="choice-button" data-ending="past" type="button">Rivivi il passato</button>
+          <button class="choice-button" data-ending="present" type="button">Resta nel presente</button>
+          <button class="choice-button" data-ending="future" type="button">Apri il futuro</button>
+        </div>
+        <div class="ending-message" id="endingMessage" aria-live="polite">Scegli una porta per continuare…</div>
+        <button class="primary-button" id="revealFinal" type="button" style="margin-top:22px;">Apri la dedica di Kimberly ♥</button>
+        <div class="final-reveal" id="finalReveal">
+          <h3>Alexandra, sei casa.</h3>
+          <p>Grazie per questi diciotto mesi: per i viaggi estivi, per le risate, per i momenti semplici e per tutto quello che riusciamo a costruire anche senza accorgercene. Mi piace la nostra storia perché è vera, nostra e ancora tutta da scrivere.</p>
+          <p>Ti amo, e sceglierei te — in ogni versione del tempo, in ogni viaggio, in ogni mese che verrà.</p>
+          <div class="signature">Con tutto il mio amore,<br><strong>Kimberly</strong></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Fatto con <strong>♥</strong> da Kimberly per Alexandra · 18 mesi di noi</footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="celebration" id="celebration" aria-hidden="true"></div>
+
+  <div class="modal-backdrop" id="editorBackdrop" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
+    <form class="modal" id="editorForm">
+      <div class="modal-head"><div><div class="eyebrow" id="editorKicker">Personalizza</div><h2 id="editorTitle">Il vostro ricordo</h2></div><button class="close-button" id="closeEditor" type="button" aria-label="Chiudi">×</button></div>
+      <div class="form-row"><label for="editorName">Titolo</label><input id="editorName" type="text" required></div>
+      <div class="form-row"><label for="editorMemory">Ricordo</label><textarea id="editorMemory" required></textarea></div>
+      <div class="form-row"><label for="editorDedication">Breve dedica di Kimberly</label><textarea id="editorDedication" required></textarea></div>
+      <div class="form-row"><label for="editorImage">Foto</label><input id="editorImage" type="file" accept="image/*"><div class="editor-preview" id="editorPreview">Nessuna foto selezionata</div></div>
+      <div class="modal-actions"><button class="secondary-button" id="cancelEditor" type="button">Annulla</button><button class="primary-button" type="submit">Salva ricordo</button></div>
+    </form>
+  </div>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = 'lettera-alexandra-kimberly-v1';
+      const defaultMonths = [
+        ['L\'inizio', 'Il primo capitolo di qualcosa che non sapevamo ancora quanto sarebbe diventato importante.', 'Da quel momento, ogni cosa ha iniziato ad avere un colore diverso.'],
+        ['Le prime risate', 'Quel tipo di risata che arriva senza preavviso e resta addosso per tutto il giorno.', 'Con te anche le cose più normali hanno una parte divertente.'],
+        ['Piccole abitudini', 'Le cose semplici che, senza far rumore, sono diventate soltanto nostre.', 'Mi piace il nostro modo di sentirci a casa.'],
+        ['Complicità', 'Uno sguardo, una battuta e già sappiamo entrambe cosa sta succedendo.', 'Essere capita da te è una delle mie fortune più grandi.'],
+        ['Un po\' più noi', 'Un altro mese da aggiungere alla collezione dei momenti che vorrei rivivere.', 'Ogni giorno con te mi insegna un nuovo modo di volerti bene.'],
+        ['Estate', 'Il calore fuori e quello che ci portiamo dentro quando stiamo insieme.', 'Sei il mio posto fresco anche nelle giornate più calde.'],
+        ['Giorni qualsiasi', 'Perché a volte il ricordo più bello è semplicemente esserci.', 'Non mi servono grandi occasioni: mi basti tu.'],
+        ['Sorrisi', 'Quelli che arrivano solo pronunciando il tuo nome.', 'Il tuo sorriso è uno dei miei paesaggi preferiti.'],
+        ['Casa', 'Non un luogo preciso, ma quella sensazione che arriva quando ti ho vicino.', 'Con te mi sento esattamente dove vorrei essere.'],
+        ['Un altro viaggio', 'Una nuova pagina, una nuova foto, la stessa persona accanto a me.', 'Ogni strada è più bella se la percorriamo insieme.'],
+        ['Le nostre parole', 'Le frasi che solo noi capiamo e che fanno sorridere anche senza contesto.', 'Amo il nostro linguaggio segreto.'],
+        ['Crescere insieme', 'Imparare, cambiare e continuare a riconoscerci.', 'Mi piace la persona che sono quando sono con te.'],
+        ['Tenerezza', 'Un gesto piccolo, una carezza, il modo in cui ci cerchiamo.', 'La dolcezza che mi dai non smette mai di sorprendermi.'],
+        ['Risate fuori programma', 'Il genere di ricordo che non si può organizzare e per questo è ancora più bello.', 'Con te mi sento libera di essere completamente me stessa.'],
+        ['Il nostro ritmo', 'A volte veloci, a volte lente, ma sempre dalla stessa parte.', 'Mi piace il modo in cui troviamo il nostro passo.'],
+        ['Quasi un anno e mezzo', 'Tanti giorni passati e ancora la voglia di raccontarti tutto.', 'Sei la mia persona preferita da aggiornare su ogni cosa.'],
+        ['Grazie', 'Per tutto quello che fai e per tutto quello che sei, anche quando non te ne accorgi.', 'Grazie per aver reso più bello il mio tempo.'],
+        ['18 mesi', 'Un traguardo che sembra un punto, ma per me è una virgola: la storia continua.', 'Ti sceglierei ancora, Alexandra. In ogni capitolo.']
+      ];
+      const defaultTrips = [
+        { title: 'La prima estate', subtitle: 'Viaggio estivo · 01', memory: 'Scrivi qui il luogo, la cosa più bella che avete visto e quel dettaglio che vi fa ancora sorridere.', dedication: 'Con te anche una strada sconosciuta diventa un ricordo che so già di voler conservare.' },
+        { title: 'La seconda estate', subtitle: 'Viaggio estivo · 02', memory: 'Scrivi qui l\'episodio più divertente, la foto preferita o una piccola avventura vissuta insieme.', dedication: 'Il mio souvenir preferito di ogni viaggio sei sempre tu.' }
+      ];
+      const reasons = [
+        'Per il tuo sorriso quando cerchi di non ridere.', 'Per come rendi speciali le cose normali.', 'Per la tua dolcezza nei dettagli.', 'Per tutte le volte che mi fai sentire capita.', 'Per la tua forza, anche quando non la vedi.', 'Per il modo in cui sai farmi casa.', 'Per le nostre battute che non capirebbe nessun\'altra.', 'Perché con te posso essere davvero me stessa.', 'Per il tuo modo unico di guardare il mondo.', 'Per le risate che arrivano nei momenti improbabili.', 'Perché ogni viaggio con te diventa una storia.', 'Per tutte le volte che mi scegli, anche senza dirlo.', 'Per la calma che sai portarmi.', 'Per la curiosità con cui vivi le cose.', 'Perché fai spazio ai miei sogni.', 'Per come celebri anche le piccole vittorie.', 'Per il futuro che mi viene voglia di immaginare.', 'Perché sei tu, e questo mi basta ogni giorno.'
+      ];
+      const memories = [
+        'Una foto nuova insieme, anche se viene un po\' mossa.',
+        'Una serata senza programmi, solo noi due.',
+        'Un viaggio che dobbiamo ancora inventare.',
+        'Una cosa che ami di lei e che forse non le dici abbastanza.',
+        'Un posto in cui tornare tenendovi per mano.',
+        'Una risata da collezionare nel prossimo mese.',
+        'Una canzone da aggiungere alla vostra storia.',
+        'Un “grazie” per qualcosa di piccolo ma importante.'
+      ];
+      const quiz = [
+        { q: 'Qual è il vero superpotere delle vostre estati?', a: ['Fare foto perfette al primo tentativo', 'Trasformare ogni imprevisto in un ricordo', 'Non dimenticare mai la crema solare'], correct: 1, ok: 'Esatto: le cose più belle spesso non erano nel programma.' },
+        { q: 'Cosa rende speciale un mese qualunque?', a: ['Le piccole cose fatte insieme', 'Un piano organizzato al minuto', 'Aspettare il momento perfetto'], correct: 0, ok: 'Sì. La vostra magia abita soprattutto nelle cose semplici.' },
+        { q: 'Quale promessa vi somiglia di più?', a: ['Non cambiare mai', 'Continuare a sceglierci mentre cresciamo', 'Avere sempre ragione'], correct: 1, ok: 'Proprio così: crescere senza smettere di riconoscervi.' },
+        { q: 'Quale palette racconta meglio il vostro “noi”?', a: ['Solo rosa', 'Solo blu', 'Rosa, marrone, blu e nero: due mondi che si incontrano'], correct: 2, ok: 'La risposta più bella: due mondi diversi, una storia condivisa.' }
+      ];
+
+      const deepCopy = (value) => JSON.parse(JSON.stringify(value));
+      const defaultState = () => ({ months: defaultMonths.map(([title, memory, dedication]) => ({ title, memory, dedication, photo: '' })), trips: deepCopy(defaultTrips).map(t => ({ ...t, photo: '' })), theme: 'shared' });
+      let state;
+      try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState(); } catch (_) { state = defaultState(); }
+      if (!state.months || state.months.length !== 18) state.months = defaultState().months;
+      if (!state.trips || state.trips.length !== 2) state.trips = defaultState().trips;
+
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+      const escapeHTML = (value = '') => String(value).replace(/[&<>'"]/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[character]);
+      const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const toast = (message) => { const el = $('#toast'); el.textContent = message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => el.classList.remove('show'), 3200); };
+
+      function renderMonths() {
+        $('#monthsGrid').innerHTML = state.months.map((month, index) => `
+          <article class="month-card">
+            <div class="month-photo">
+              ${month.photo ? `<img src="${month.photo}" alt="Foto del mese ${index + 1}">` : `<div class="photo-placeholder"><strong>${String(index + 1).padStart(2, '0')}</strong><span>aggiungi la vostra foto</span></div>`}
+            </div>
+            <div class="month-content">
+              <div class="month-kicker">Mese ${String(index + 1).padStart(2, '0')} · 18</div>
+              <h3>${escapeHTML(month.title)}</h3>
+              <p class="month-memory">${escapeHTML(month.memory)}</p>
+              <blockquote>${escapeHTML(month.dedication)}</blockquote>
+              <button class="small-button edit-month" data-index="${index}" type="button">✎ Personalizza</button>
+            </div>
+          </article>`).join('');
+        $$('.edit-month').forEach(button => button.addEventListener('click', () => openEditor('month', Number(button.dataset.index))));
+      }
+
+      function renderTrips() {
+        $('#tripsGrid').innerHTML = state.trips.map((trip, index) => `
+          <article class="trip-card" data-trip="${index}">
+            <div class="trip-inner">
+              <div class="trip-face trip-front ${trip.photo ? 'has-photo' : ''}" ${trip.photo ? `style="background-image:url('${trip.photo}')"` : ''}>
+                <span class="flip-hint">tocca per girare ↻</span>
+                <div class="trip-front-content"><div class="eyebrow">${escapeHTML(trip.subtitle)}</div><h3>${escapeHTML(trip.title)}</h3><p>Una cartolina da conservare per sempre.</p></div>
+                <button class="small-button trip-edit" type="button">✎ Modifica</button>
+              </div>
+              <div class="trip-face trip-back"><div class="eyebrow">Ricordo estivo · ${String(index + 1).padStart(2, '0')}</div><h3>${escapeHTML(trip.title)}</h3><p>${escapeHTML(trip.memory)}</p><blockquote>${escapeHTML(trip.dedication)}</blockquote><button class="small-button trip-edit" type="button">✎ Modifica cartolina</button></div>
+            </div>
+          </article>`).join('');
+        $$('.trip-card').forEach(card => {
+          card.addEventListener('click', event => { if (!event.target.closest('.trip-edit')) card.classList.toggle('flipped'); });
+          card.querySelectorAll('.trip-edit').forEach(button => button.addEventListener('click', event => { event.stopPropagation(); openEditor('trip', Number(card.dataset.trip)); }));
+        });
+      }
+
+      function renderReasons() {
+        $('#reasonsGrid').innerHTML = reasons.map((reason, index) => `<button class="reason-card" type="button" data-reason="${index}"><span class="number">${String(index + 1).padStart(2, '0')} / 18</span><span class="reason-cover">Tocca per scoprire<br>un motivo ♥</span><p>${escapeHTML(reason)}</p></button>`).join('');
+        $$('.reason-card').forEach(card => card.addEventListener('click', () => { card.classList.toggle('is-open'); toast(card.classList.contains('is-open') ? 'Motivo sbloccato ♥' : 'Motivo nascosto'); }));
+      }
+
+      let editorType = 'month'; let editorIndex = 0; let editorPhoto = '';
+      function openEditor(type, index) {
+        editorType = type; editorIndex = index;
+        const item = state[type === 'month' ? 'months' : 'trips'][index];
+        $('#editorKicker').textContent = type === 'month' ? `Mese ${String(index + 1).padStart(2, '0')}` : `Viaggio estivo ${String(index + 1).padStart(2, '0')}`;
+        $('#editorTitle').textContent = type === 'month' ? 'Personalizza il ricordo' : 'Personalizza la cartolina';
+        $('#editorName').value = item.title || '';
+        $('#editorMemory').value = item.memory || '';
+        $('#editorDedication').value = item.dedication || '';
+        editorPhoto = item.photo || '';
+        $('#editorPreview').innerHTML = editorPhoto ? `<img src="${editorPhoto}" alt="Anteprima foto">` : 'Nessuna foto selezionata';
+        $('#editorBackdrop').classList.add('open');
+        $('#editorName').focus();
+      }
+      function closeEditor() { $('#editorBackdrop').classList.remove('open'); }
+      $('#closeEditor').addEventListener('click', closeEditor); $('#cancelEditor').addEventListener('click', closeEditor);
+      $('#editorBackdrop').addEventListener('click', event => { if (event.target === $('#editorBackdrop')) closeEditor(); });
+      $('#editorImage').addEventListener('change', event => {
+        const file = event.target.files[0]; if (!file) return;
+        const reader = new FileReader(); reader.onload = () => { editorPhoto = reader.result; $('#editorPreview').innerHTML = `<img src="${editorPhoto}" alt="Anteprima foto">`; }; reader.readAsDataURL(file);
+      });
+      $('#editorForm').addEventListener('submit', event => {
+        event.preventDefault(); const collection = editorType === 'month' ? state.months : state.trips;
+        collection[editorIndex] = { ...collection[editorIndex], title: $('#editorName').value.trim(), memory: $('#editorMemory').value.trim(), dedication: $('#editorDedication').value.trim(), photo: editorPhoto };
+        save(); renderMonths(); renderTrips(); closeEditor(); toast('Ricordo salvato nel vostro album ♥');
+      });
+      $('#resetLetter').addEventListener('click', () => { if (confirm('Ripristinare i testi demo? Le foto aggiunte verranno rimosse.')) { state = defaultState(); save(); renderMonths(); renderTrips(); toast('L’album demo è stato ripristinato.'); } });
+
+      let quizIndex = 0; let quizScore = 0; let quizAnswered = false;
+      function renderQuiz() {
+        const current = quiz[quizIndex]; $('#quizCount').textContent = `Domanda ${quizIndex + 1} di ${quiz.length}`; $('#quizQuestion').textContent = current.q; $('#quizOptions').innerHTML = current.a.map((answer, index) => `<button class="quiz-option" type="button" data-answer="${index}">${escapeHTML(answer)}</button>`).join(''); $('#quizFeedback').textContent = ''; $('#quizNext').style.display = 'none'; $('#quizResult').hidden = true; quizAnswered = false;
+        $$('.quiz-option').forEach(button => button.addEventListener('click', () => answerQuiz(Number(button.dataset.answer))));
+      }
+      function answerQuiz(answer) { if (quizAnswered) return; quizAnswered = true; const current = quiz[quizIndex]; const options = $$('.quiz-option'); options.forEach((button, index) => { button.disabled = true; if (index === current.correct) button.classList.add('correct'); if (index === answer && answer !== current.correct) button.classList.add('wrong'); }); if (answer === current.correct) quizScore++; $('#quizFeedback').textContent = answer === current.correct ? current.ok : 'Quasi: la risposta giusta, però, è sempre quella che vi fa sorridere insieme.'; if (quizIndex < quiz.length - 1) { $('#quizNext').style.display = 'inline-flex'; } else { showQuizResult(); } }
+      function showQuizResult() { $('#quizQuestion').textContent = ''; $('#quizOptions').innerHTML = ''; $('#quizNext').style.display = 'none'; const result = $('#quizResult'); result.hidden = false; result.innerHTML = `<strong>${quizScore}/${quiz.length}</strong><p>Il punteggio è solo un pretesto: il vostro “noi” ha già vinto.</p><button class="secondary-button" id="resetQuiz" type="button">Rigioca</button>`; $('#resetQuiz').addEventListener('click', () => { quizIndex = 0; quizScore = 0; renderQuiz(); }); }
+      $('#quizNext').addEventListener('click', () => { quizIndex++; renderQuiz(); });
+
+      let puzzleImage = ''; let puzzleOrder = [...Array(9).keys()];
+      function legalShuffle() { puzzleOrder = [...Array(9).keys()]; let blank = 8; for (let i = 0; i < 40; i++) { const neighbors = [blank - 1, blank + 1, blank - 3, blank + 3].filter(position => position >= 0 && position < 9 && Math.abs((position % 3) - (blank % 3)) + Math.abs(Math.floor(position / 3) - Math.floor(blank / 3)) === 1); const next = neighbors[Math.floor(Math.random() * neighbors.length)]; [puzzleOrder[blank], puzzleOrder[next]] = [puzzleOrder[next], puzzleOrder[blank]]; blank = next; } }
+      function renderPuzzle() { const grid = $('#puzzleGrid'); grid.innerHTML = puzzleOrder.map((piece, position) => { const isEmpty = piece === 8; const style = puzzleImage && !isEmpty ? `style="background-image:url('${puzzleImage}');background-position:${(piece % 3) * 50}% ${Math.floor(piece / 3) * 50}%"` : ''; return `<button class="puzzle-tile ${isEmpty ? 'empty' : ''}" data-position="${position}" type="button" aria-label="Tessera ${piece + 1}" ${style}>${!puzzleImage && !isEmpty ? piece + 1 : ''}</button>`; }).join(''); $$('.puzzle-tile:not(.empty)').forEach(tile => tile.addEventListener('click', () => movePuzzle(Number(tile.dataset.position)))); }
+      function movePuzzle(position) { const blank = puzzleOrder.indexOf(8); const adjacent = Math.abs((position % 3) - (blank % 3)) + Math.abs(Math.floor(position / 3) - Math.floor(blank / 3)) === 1; if (!adjacent) return; [puzzleOrder[position], puzzleOrder[blank]] = [puzzleOrder[blank], puzzleOrder[position]]; renderPuzzle(); if (puzzleOrder.every((piece, index) => piece === index)) { $('#puzzleStatus').textContent = 'Foto ricomposta: questo ricordo è tutto vostro ♥'; toast('Puzzle completato!'); } }
+      $('#puzzleUpload').addEventListener('change', event => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { puzzleImage = reader.result; legalShuffle(); renderPuzzle(); $('#puzzleStatus').textContent = 'Ora ricomponi la vostra foto.'; }; reader.readAsDataURL(file); });
+
+      $$('.track').forEach(track => track.addEventListener('click', () => track.classList.toggle('open')));
+      $('#drawMemory').addEventListener('click', () => { $('#drawnMemory').textContent = memories[Math.floor(Math.random() * memories.length)]; });
+      $('#addTodayMemory').addEventListener('click', () => { const message = prompt('Scrivi un pensiero da conservare per oggi:'); if (message && message.trim()) { $('#drawnMemory').textContent = message.trim(); toast('Il messaggio è entrato nel barattolo ♥'); } });
+
+      function initScratchCards() { $$('.scratch-card').forEach(card => { const canvas = $('.scratch-canvas', card); const context = canvas.getContext('2d'); const resize = () => { const ratio = window.devicePixelRatio || 1; const rect = card.getBoundingClientRect(); canvas.width = rect.width * ratio; canvas.height = rect.height * ratio; context.setTransform(ratio, 0, 0, ratio, 0, 0); context.globalCompositeOperation = 'source-over'; context.fillStyle = '#a76d7d'; context.fillRect(0, 0, rect.width, rect.height); context.fillStyle = 'rgba(255,238,242,.35)'; for (let x = -rect.height; x < rect.width + rect.height; x += 18) { context.save(); context.translate(x, 0); context.rotate(-.45); context.fillRect(0, 0, 8, rect.height * 2); context.restore(); } }; resize(); let strokes = 0; const scratch = event => { const rect = canvas.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top; context.globalCompositeOperation = 'destination-out'; context.beginPath(); context.arc(x, y, 21, 0, Math.PI * 2); context.fill(); strokes++; if (strokes > 22) { canvas.style.opacity = '0'; canvas.style.pointerEvents = 'none'; } }; canvas.addEventListener('pointerdown', event => { canvas.setPointerCapture(event.pointerId); scratch(event); }); canvas.addEventListener('pointermove', event => { if (event.buttons) scratch(event); }); }); }
+
+      let foundSecrets = 0; $$('.secret-heart').forEach(heart => heart.addEventListener('click', () => { if (heart.classList.contains('found')) return; heart.classList.add('found'); foundSecrets++; $('#secretCount').textContent = `${foundSecrets}/5`; toast(heart.dataset.secret); if (foundSecrets === 5) createCelebration(12); }));
+      $$('.future-card').forEach(card => card.addEventListener('click', () => { card.classList.toggle('open'); card.querySelector('.future-lock').textContent = card.classList.contains('open') ? '🔓' : '🔒'; }));
+      const endings = { past: 'Tieni stretti i ricordi: sono il modo più dolce di dire “ce l’abbiamo fatta insieme”.', present: 'Resta qui: il mio momento preferito è quello in cui ti guardo e ci siamo, semplicemente.', future: 'Apri il futuro: ci sono ancora estati, foto e capitoli che aspettano solo noi.' };
+      $$('.choice-button').forEach(button => button.addEventListener('click', () => { $('#endingMessage').textContent = endings[button.dataset.ending]; }));
+      function createCelebration(count = 18) { const box = $('#celebration'); box.innerHTML = ''; const symbols = ['♥','✦','♡','✧','●']; for (let i = 0; i < count; i++) { const span = document.createElement('span'); span.textContent = symbols[Math.floor(Math.random() * symbols.length)]; span.style.left = `${Math.random() * 100}%`; span.style.color = ['#f2b3c5','#9bbcdf','#f5d9a7','#fff'][Math.floor(Math.random() * 4)]; span.style.animationDelay = `${Math.random() * .9}s`; span.style.animationDuration = `${3 + Math.random() * 2}s`; box.appendChild(span); } setTimeout(() => box.innerHTML = '', 5600); }
+      $('#revealFinal').addEventListener('click', () => { $('#finalReveal').classList.add('show'); $('#revealFinal').textContent = 'Dedica aperta ♥'; $('#revealFinal').disabled = true; createCelebration(24); });
+
+      const themes = [{ key: 'shared', label: 'Tema condiviso' }, { key: 'alexandra', label: 'Tema Alexandra' }, { key: 'kimberly', label: 'Tema Kimberly' }];
+      function applyTheme() { document.body.dataset.theme = state.theme || 'shared'; $('#themeButton').textContent = themes.find(theme => theme.key === document.body.dataset.theme)?.label || themes[0].label; }
+      $('#themeButton').addEventListener('click', () => { const current = themes.findIndex(theme => theme.key === document.body.dataset.theme); state.theme = themes[(current + 1) % themes.length].key; save(); applyTheme(); toast(`Attivato: ${themes[(current + 1) % themes.length].label}`); });
+      $('#openLetter').addEventListener('click', () => { $('#introScreen').classList.add('is-open'); document.body.style.overflow = ''; setTimeout(() => $('#hero').focus?.(), 500); });
+      window.addEventListener('scroll', () => { const scrollable = document.documentElement.scrollHeight - window.innerHeight; $('#scrollProgress').style.width = `${scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0}%`; });
+
+      renderMonths(); renderTrips(); renderReasons(); renderQuiz(); legalShuffle(); renderPuzzle(); initScratchCards(); applyTheme();
+    })();
+  </script>
+</body>
+</html>
