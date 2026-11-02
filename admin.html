@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pannello privato · Alexandra & Kimberly</title>
+  <style>
+    :root { --rose:#c9698b; --rose-soft:#f8e7ed; --blue:#355d88; --ink:#171722; --muted:#6f6875; --paper:#fffdfb; --cream:#fff8f4; --line:rgba(23,18,28,.12); --shadow:0 16px 45px rgba(38,24,39,.09); }
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 0 0,rgba(233,168,187,.22),transparent 28rem),radial-gradient(circle at 100% 10%,rgba(110,155,199,.18),transparent 28rem),var(--cream);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5} h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:500;line-height:1.05} button,input,textarea{font:inherit} button{cursor:pointer} .wrap{width:min(1120px,calc(100% - 32px));margin:0 auto} .topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:22px 0}.brand{font-family:Georgia,serif;font-size:1.25rem}.brand span{color:var(--rose)} .eyebrow{color:var(--rose);font-size:.7rem;font-weight:800;letter-spacing:.17em;text-transform:uppercase}.hero{padding:42px 0 32px}.hero h1{font-size:clamp(2.8rem,7vw,5.5rem);margin:13px 0}.hero p{max-width:660px;color:var(--muted)} .panel{background:rgba(255,253,251,.84);border:1px solid rgba(255,255,255,.9);border-radius:26px;box-shadow:var(--shadow);padding:clamp(20px,4vw,36px);margin:22px 0}.auth-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.field{display:grid;gap:7px;margin-top:14px}.field label{color:var(--blue);font-size:.73rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}.field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px 12px;background:#fff;color:var(--ink);outline:none}.field textarea{min-height:92px;resize:vertical}.field input:focus,.field textarea:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(201,105,139,.13)}.button-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:20px}.primary,.secondary,.danger{border-radius:99px;padding:11px 16px;border:1px solid transparent;font-weight:800;font-size:.86rem}.primary{color:#fff;background:linear-gradient(135deg,var(--rose),var(--blue));box-shadow:0 10px 22px rgba(201,105,139,.24)}.secondary{background:#fff;border-color:var(--line);color:var(--blue)}.danger{background:#fff0f2;border-color:#e1a0b0;color:#a84769}.primary:hover,.secondary:hover,.danger:hover{transform:translateY(-1px)}.status{min-height:24px;color:var(--blue);font-size:.86rem}.hidden{display:none!important}.toolbar{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}.toolbar h2{margin:0}.hint{color:var(--muted);font-size:.86rem}.editor-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}.edit-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}.edit-card summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center;font-family:Georgia,serif;font-size:1.2rem}.edit-card summary::-webkit-details-marker{display:none}.edit-card summary::after{content:"＋";font-family:system-ui;color:var(--rose);font-size:1.2rem}.edit-card[open] summary::after{content:"−"}.edit-card[open] summary{padding-bottom:8px;border-bottom:1px dashed var(--line)}.small-label{font-size:.72rem;color:var(--muted);font-weight:800;letter-spacing:.1em;text-transform:uppercase}.photo-row{display:flex;gap:12px;align-items:center;margin-top:13px}.photo-preview{width:86px;height:60px;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#efb7c9,#7ba8d3);display:grid;place-items:center;color:#fff;font-size:.7rem;text-align:center}.photo-preview img{width:100%;height:100%;object-fit:cover}.photo-input{font-size:.78rem;max-width:100%}.reasons-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.reasons-grid .field{margin-top:0}.callout{background:linear-gradient(135deg,rgba(233,168,187,.16),rgba(110,155,199,.14));border:1px solid rgba(201,105,139,.16);border-radius:18px;padding:16px;color:#684f63;font-size:.88rem}.login-note{font-size:.8rem;color:var(--muted);margin-top:12px}.logout{margin-left:auto}.footer{padding:22px 0 42px;text-align:center;color:var(--muted);font-size:.78rem}@media(max-width:700px){.auth-grid,.editor-grid,.reasons-grid{grid-template-columns:1fr}.wrap{width:min(100% - 22px,1120px)}.hero{padding-top:28px}.topbar{align-items:flex-start}.logout{margin-left:0}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar"><a class="brand" href="index.html">A <span>♥</span> K</a><span class="eyebrow">Pannello privato</span></header>
+    <section class="hero"><div class="eyebrow">Solo per Kimberly</div><h1>Modifica la vostra<br><em>storia.</em></h1><p>Qui puoi aggiornare la lettera senza toccare il codice. Le modifiche salvate saranno visibili a tutte le persone che aprono il link pubblico.</p></section>
+
+    <section class="panel" id="authPanel">
+      <div class="eyebrow">Accesso riservato</div><h2>Entra nel pannello</h2><p class="hint">Usa l’email e la password dell’account Supabase che creerai per amministrare la lettera.</p>
+      <div class="auth-grid"><div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="email" placeholder="la-tua-email@example.com"></div><div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" placeholder="La tua password"></div></div>
+      <div class="button-row"><button class="primary" id="loginButton" type="button">Accedi</button><button class="secondary" id="signupButton" type="button">Crea account</button></div><div class="status" id="authStatus" aria-live="polite"></div><p class="login-note">Non condividere la password. Alexandra e gli altri non devono entrare qui.</p>
+    </section>
+
+    <section class="panel hidden" id="editorPanel">
+      <div class="toolbar"><div><div class="eyebrow">Editor visuale</div><h2>Il contenuto della lettera</h2></div><button class="secondary logout" id="logoutButton" type="button">Esci</button></div>
+      <div class="callout" style="margin-top:18px">Compila i campi che vuoi aggiornare e premi <strong>Salva tutte le modifiche</strong>. Le foto vengono caricate nell’archivio del sito; i visitatori vedranno il nuovo contenuto al prossimo caricamento.</div>
+      <div class="button-row"><button class="primary" id="saveButton" type="button">Salva tutte le modifiche ♥</button><span class="status" id="saveStatus" aria-live="polite"></span></div>
+
+      <div class="panel" style="padding:0;border:0;box-shadow:none;background:transparent;margin-top:30px"><div class="toolbar"><h2>18 mesi</h2><span class="hint">Apri ogni scheda per modificarla</span></div><div class="editor-grid" id="monthsFields" style="margin-top:14px"></div></div>
+      <div class="panel" style="padding:0;border:0;box-shadow:none;background:transparent"><div class="toolbar"><h2>Due viaggi estivi</h2></div><div class="editor-grid" id="tripsFields" style="margin-top:14px"></div></div>
+      <div class="panel" style="padding:0;border:0;box-shadow:none;background:transparent"><div class="toolbar"><h2>18 motivi</h2></div><div class="reasons-grid" id="reasonsFields" style="margin-top:14px"></div></div>
+      <div class="panel" style="padding:0;border:0;box-shadow:none;background:transparent"><div class="toolbar"><h2>Dedica finale</h2></div><div class="field"><label for="finalHeading">Titolo finale</label><input id="finalHeading" type="text"></div><div class="field"><label for="finalParagraphOne">Primo paragrafo</label><textarea id="finalParagraphOne"></textarea></div><div class="field"><label for="finalParagraphTwo">Secondo paragrafo</label><textarea id="finalParagraphTwo"></textarea></div><div class="field"><label for="finalSignature">Firma</label><input id="finalSignature" type="text"></div></div>
+    </section>
+  </div>
+  <footer class="footer">Il pannello è privato · la pagina pubblica resta disponibile nel tuo stesso link GitHub Pages.</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="shared-content.js"></script>
+  <script>
+    (() => {
+      const config = window.SUPABASE_CONFIG || {};
+      const client = window.supabase && config.url && config.anonKey ? window.supabase.createClient(config.url, config.anonKey) : null;
+      const $ = selector => document.querySelector(selector);
+      const deepCopy = value => JSON.parse(JSON.stringify(value));
+      const defaults = deepCopy(window.LETTER_DEFAULTS || { months: [], trips: [], reasons: [], memories: [], final: {} });
+      let user = null;
+      let content = defaults;
+
+      const setStatus = (id, message, error = false) => { const el = $(id); el.textContent = message; el.style.color = error ? '#b24b67' : ''; };
+      const mediaUrl = value => value || '';
+      const renderPhotoPreview = (container, url) => { container.innerHTML = url ? `<img src="${url}" alt="Anteprima foto">` : 'Nessuna foto'; };
+
+      function renderEditor() {
+        $('#monthsFields').innerHTML = content.months.map((month, index) => `<details class="edit-card"><summary>Mese ${String(index + 1).padStart(2, '0')} · ${escapeText(month.title || 'Senza titolo')}</summary><div class="field"><label>Titolo</label><input data-month-title="${index}" type="text"></div><div class="field"><label>Ricordo</label><textarea data-month-memory="${index}"></textarea></div><div class="field"><label>Breve dedica</label><textarea data-month-dedication="${index}"></textarea></div><div class="photo-row"><div class="photo-preview" data-month-preview="${index}">Nessuna foto</div><div><div class="small-label">Foto del mese</div><input class="photo-input" data-month-photo="${index}" type="file" accept="image/*"></div></div></details>`).join('');
+        content.months.forEach((month, index) => { $(`[data-month-title="${index}"]`).value = month.title || ''; $(`[data-month-memory="${index}"]`).value = month.memory || ''; $(`[data-month-dedication="${index}"]`).value = month.dedication || ''; renderPhotoPreview($(`[data-month-preview="${index}"]`), month.photo); });
+        $('#tripsFields').innerHTML = content.trips.map((trip, index) => `<details class="edit-card"><summary>${escapeText(trip.title || `Viaggio ${index + 1}`)}</summary><div class="field"><label>Titolo</label><input data-trip-title="${index}" type="text"></div><div class="field"><label>Sottotitolo</label><input data-trip-subtitle="${index}" type="text"></div><div class="field"><label>Ricordo</label><textarea data-trip-memory="${index}"></textarea></div><div class="field"><label>Dedica</label><textarea data-trip-dedication="${index}"></textarea></div><div class="photo-row"><div class="photo-preview" data-trip-preview="${index}">Nessuna foto</div><div><div class="small-label">Foto del viaggio</div><input class="photo-input" data-trip-photo="${index}" type="file" accept="image/*"></div></div></details>`).join('');
+        content.trips.forEach((trip, index) => { $(`[data-trip-title="${index}"]`).value = trip.title || ''; $(`[data-trip-subtitle="${index}"]`).value = trip.subtitle || ''; $(`[data-trip-memory="${index}"]`).value = trip.memory || ''; $(`[data-trip-dedication="${index}"]`).value = trip.dedication || ''; renderPhotoPreview($(`[data-trip-preview="${index}"]`), trip.photo); });
+        $('#reasonsFields').innerHTML = content.reasons.map((reason, index) => `<div class="field"><label>Motivo ${String(index + 1).padStart(2, '0')}</label><input data-reason="${index}" type="text"></div>`).join('');
+        content.reasons.forEach((reason, index) => { $(`[data-reason="${index}"]`).value = reason || ''; });
+        $('#finalHeading').value = content.final?.heading || ''; $('#finalParagraphOne').value = content.final?.paragraphOne || ''; $('#finalParagraphTwo').value = content.final?.paragraphTwo || ''; $('#finalSignature').value = content.final?.signature || '';
+      }
+
+      function escapeText(value = '') { return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char])); }
+      async function loadContent() {
+        if (!client || !user) return;
+        setStatus('#saveStatus', 'Caricamento dei contenuti…');
+        const { data, error } = await client.from('site_content').select('content,owner_id').eq('id', 'main').maybeSingle();
+        if (error) { setStatus('#saveStatus', error.message, true); return; }
+        if (data?.content) content = { ...defaults, ...data.content, final: { ...defaults.final, ...(data.content.final || {}) } };
+        else content = defaults;
+        renderEditor(); setStatus('#saveStatus', data ? 'Contenuti caricati.' : 'Nessun contenuto online: puoi creare il primo salvataggio.');
+      }
+
+      async function uploadPhoto(file, folder, index) {
+        if (!file) return null;
+        const extension = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const path = `${user.id}/${folder}-${String(index + 1).padStart(2, '0')}-${Date.now()}.${extension}`;
+        const { error } = await client.storage.from('site-media').upload(path, file, { contentType: file.type || 'image/jpeg', upsert: false });
+        if (error) throw error;
+        return client.storage.from('site-media').getPublicUrl(path).data.publicUrl;
+      }
+
+      async function collectContent() {
+        const next = deepCopy(content);
+        next.months = next.months.map((month, index) => ({ ...month, title: $(`[data-month-title="${index}"]`).value.trim(), memory: $(`[data-month-memory="${index}"]`).value.trim(), dedication: $(`[data-month-dedication="${index}"]`).value.trim() }));
+        next.trips = next.trips.map((trip, index) => ({ ...trip, title: $(`[data-trip-title="${index}"]`).value.trim(), subtitle: $(`[data-trip-subtitle="${index}"]`).value.trim(), memory: $(`[data-trip-memory="${index}"]`).value.trim(), dedication: $(`[data-trip-dedication="${index}"]`).value.trim() }));
+        next.reasons = next.reasons.map((_, index) => $(`[data-reason="${index}"]`).value.trim());
+        next.final = { heading: $('#finalHeading').value.trim(), paragraphOne: $('#finalParagraphOne').value.trim(), paragraphTwo: $('#finalParagraphTwo').value.trim(), signature: $('#finalSignature').value.trim() };
+        for (let index = 0; index < next.months.length; index++) { const file = $(`[data-month-photo="${index}"]`).files[0]; if (file) next.months[index].photo = await uploadPhoto(file, 'month', index); }
+        for (let index = 0; index < next.trips.length; index++) { const file = $(`[data-trip-photo="${index}"]`).files[0]; if (file) next.trips[index].photo = await uploadPhoto(file, 'trip', index); }
+        return next;
+      }
+
+      async function saveContent() {
+        if (!client || !user) return;
+        $('#saveButton').disabled = true; setStatus('#saveStatus', 'Salvataggio in corso…');
+        try {
+          const next = await collectContent();
+          const { data: existing, error: readError } = await client.from('site_content').select('owner_id').eq('id', 'main').maybeSingle();
+          if (readError) throw readError;
+          if (existing && existing.owner_id !== user.id) throw new Error('Questo contenuto appartiene a un altro account Supabase.');
+          const payload = { id: 'main', owner_id: user.id, content: next, updated_at: new Date().toISOString() };
+          const result = existing ? await client.from('site_content').update(payload).eq('id', 'main') : await client.from('site_content').insert(payload);
+          if (result.error) throw result.error;
+          content = next; renderEditor(); setStatus('#saveStatus', 'Salvato! Ora il link pubblico mostra questi contenuti.');
+        } catch (error) { setStatus('#saveStatus', error.message || 'Salvataggio non riuscito.', true); }
+        finally { $('#saveButton').disabled = false; }
+      }
+
+      async function openEditor(sessionUser) { user = sessionUser; $('#authPanel').classList.add('hidden'); $('#editorPanel').classList.remove('hidden'); await loadContent(); }
+      function closeEditor() { user = null; $('#editorPanel').classList.add('hidden'); $('#authPanel').classList.remove('hidden'); }
+      $('#loginButton').addEventListener('click', async () => { if (!client) return setStatus('#authStatus', 'Configura prima supabase-config.js.', true); setStatus('#authStatus', 'Accesso…'); const { data, error } = await client.auth.signInWithPassword({ email: $('#email').value.trim(), password: $('#password').value }); if (error) return setStatus('#authStatus', error.message, true); await openEditor(data.user); });
+      $('#signupButton').addEventListener('click', async () => { if (!client) return setStatus('#authStatus', 'Configura prima supabase-config.js.', true); setStatus('#authStatus', 'Creazione account…'); const { error } = await client.auth.signUp({ email: $('#email').value.trim(), password: $('#password').value }); if (error) return setStatus('#authStatus', error.message, true); setStatus('#authStatus', 'Account creato. Se Supabase richiede conferma email, controlla la posta e poi accedi.'); });
+      $('#saveButton').addEventListener('click', saveContent);
+      $('#logoutButton').addEventListener('click', async () => { if (client) await client.auth.signOut(); closeEditor(); });
+      if (client) client.auth.getSession().then(({ data }) => { if (data.session?.user) openEditor(data.session.user); });
+    })();
+  </script>
+</body>
+</html>
