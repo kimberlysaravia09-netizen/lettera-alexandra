@@ -160,6 +160,8 @@
     blockquote { margin: auto 0 15px; padding: 10px 0 0 14px; border-left: 2px solid var(--rose); font-family: Georgia, serif; font-style: italic; color: #70576a; font-size: .93rem; }
     .small-button { border: 1px solid var(--line); background: transparent; color: var(--accent-2); border-radius: 99px; padding: 7px 10px; font-size: .74rem; font-weight: 700; align-self: flex-start; }
     .small-button:hover { background: rgba(233,168,187,.13); border-color: var(--accent); }
+    .github-mode .edit-month, .github-mode .trip-edit, .github-mode #resetLetter { display: none; }
+    .github-mode .toolbar-note { color: var(--accent-2); }
 
     .trip-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
     .trip-card { min-height: 450px; perspective: 1200px; position: relative; }
@@ -396,7 +398,7 @@
       </div>
       <div class="soft-panel">
         <div class="album-toolbar">
-          <span class="toolbar-note">Le foto e i testi che aggiungi restano salvati in questo browser.</span>
+          <span class="toolbar-note">Per aggiornare il link per tutti, modifica il blocco PERSONALIZZAZIONE GITHUB nel codice e fai commit nel repository.</span>
           <button class="secondary-button" id="resetLetter" type="button">Ripristina testi demo</button>
         </div>
         <div class="months-grid" id="monthsGrid"></div>
@@ -527,10 +529,10 @@
         <div class="ending-message" id="endingMessage" aria-live="polite">Scegli una porta per continuare…</div>
         <button class="primary-button" id="revealFinal" type="button" style="margin-top:22px;">Apri la dedica di Kimberly ♥</button>
         <div class="final-reveal" id="finalReveal">
-          <h3>Alexandra, sei casa.</h3>
-          <p>Grazie per questi diciotto mesi: per i viaggi estivi, per le risate, per i momenti semplici e per tutto quello che riusciamo a costruire anche senza accorgercene. Mi piace la nostra storia perché è vera, nostra e ancora tutta da scrivere.</p>
-          <p>Ti amo, e sceglierei te — in ogni versione del tempo, in ogni viaggio, in ogni mese che verrà.</p>
-          <div class="signature">Con tutto il mio amore,<br><strong>Kimberly</strong></div>
+          <h3 id="finalHeading">Alexandra, sei casa.</h3>
+          <p id="finalParagraphOne">Grazie per questi diciotto mesi: per i viaggi estivi, per le risate, per i momenti semplici e per tutto quello che riusciamo a costruire anche senza accorgercene. Mi piace la nostra storia perché è vera, nostra e ancora tutta da scrivere.</p>
+          <p id="finalParagraphTwo">Ti amo, e sceglierei te — in ogni versione del tempo, in ogni viaggio, in ogni mese che verrà.</p>
+          <div class="signature" id="finalSignature">Con tutto il mio amore,<br><strong>Kimberly</strong></div>
         </div>
       </div>
     </section>
@@ -551,9 +553,35 @@
     </form>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="shared-content.js"></script>
   <script>
     (() => {
       const STORAGE_KEY = 'lettera-alexandra-kimberly-v1';
+      /*
+       * ================================================================
+       * PERSONALIZZAZIONE GITHUB — MODIFICA SOLO QUESTO BLOCCO
+       *
+       * GITHUB_MODE = true: il sito è visualizzatore per tutti.
+       * Per aggiornare il link, modifica i testi qui sotto e fai commit.
+       * Per le foto: caricale nel repository, dentro la cartella assets,
+       * poi scrivi il percorso relativo, per esempio:
+       *     assets/mese-01.jpg
+       * ================================================================
+       */
+      const GITHUB_MODE = true;
+      const GITHUB_MONTH_PHOTOS = [
+        '', '', '', '', '', '', '', '', '',
+        '', '', '', '', '', '', '', '', ''
+      ];
+      const GITHUB_TRIP_PHOTOS = ['', ''];
+      /* ===================== FINE PERSONALIZZAZIONE =================== */
+      const supabaseClient = window.SUPABASE_CONFIG?.url && window.SUPABASE_CONFIG?.anonKey && window.supabase
+        ? window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey)
+        : null;
+
+      // Ogni riga è: [titolo del mese, ricordo, breve dedica].
       const defaultMonths = [
         ['L\'inizio', 'Il primo capitolo di qualcosa che non sapevamo ancora quanto sarebbe diventato importante.', 'Da quel momento, ogni cosa ha iniziato ad avere un colore diverso.'],
         ['Le prime risate', 'Quel tipo di risata che arriva senza preavviso e resta addosso per tutto il giorno.', 'Con te anche le cose più normali hanno una parte divertente.'],
@@ -574,13 +602,16 @@
         ['Grazie', 'Per tutto quello che fai e per tutto quello che sei, anche quando non te ne accorgi.', 'Grazie per aver reso più bello il mio tempo.'],
         ['18 mesi', 'Un traguardo che sembra un punto, ma per me è una virgola: la storia continua.', 'Ti sceglierei ancora, Alexandra. In ogni capitolo.']
       ];
+      // Modifica qui i due viaggi estivi: titolo, sottotitolo, ricordo e dedica.
       const defaultTrips = [
         { title: 'La prima estate', subtitle: 'Viaggio estivo · 01', memory: 'Scrivi qui il luogo, la cosa più bella che avete visto e quel dettaglio che vi fa ancora sorridere.', dedication: 'Con te anche una strada sconosciuta diventa un ricordo che so già di voler conservare.' },
         { title: 'La seconda estate', subtitle: 'Viaggio estivo · 02', memory: 'Scrivi qui l\'episodio più divertente, la foto preferita o una piccola avventura vissuta insieme.', dedication: 'Il mio souvenir preferito di ogni viaggio sei sempre tu.' }
       ];
+      // Modifica qui i 18 motivi da scoprire.
       const reasons = [
         'Per il tuo sorriso quando cerchi di non ridere.', 'Per come rendi speciali le cose normali.', 'Per la tua dolcezza nei dettagli.', 'Per tutte le volte che mi fai sentire capita.', 'Per la tua forza, anche quando non la vedi.', 'Per il modo in cui sai farmi casa.', 'Per le nostre battute che non capirebbe nessun\'altra.', 'Perché con te posso essere davvero me stessa.', 'Per il tuo modo unico di guardare il mondo.', 'Per le risate che arrivano nei momenti improbabili.', 'Perché ogni viaggio con te diventa una storia.', 'Per tutte le volte che mi scegli, anche senza dirlo.', 'Per la calma che sai portarmi.', 'Per la curiosità con cui vivi le cose.', 'Perché fai spazio ai miei sogni.', 'Per come celebri anche le piccole vittorie.', 'Per il futuro che mi viene voglia di immaginare.', 'Perché sei tu, e questo mi basta ogni giorno.'
       ];
+      // Modifica qui i bigliettini del barattolo dei ricordi.
       const memories = [
         'Una foto nuova insieme, anche se viene un po\' mossa.',
         'Una serata senza programmi, solo noi due.',
@@ -591,6 +622,7 @@
         'Una canzone da aggiungere alla vostra storia.',
         'Un “grazie” per qualcosa di piccolo ma importante.'
       ];
+      // Modifica qui le domande e le risposte del quiz.
       const quiz = [
         { q: 'Qual è il vero superpotere delle vostre estati?', a: ['Fare foto perfette al primo tentativo', 'Trasformare ogni imprevisto in un ricordo', 'Non dimenticare mai la crema solare'], correct: 1, ok: 'Esatto: le cose più belle spesso non erano nel programma.' },
         { q: 'Cosa rende speciale un mese qualunque?', a: ['Le piccole cose fatte insieme', 'Un piano organizzato al minuto', 'Aspettare il momento perfetto'], correct: 0, ok: 'Sì. La vostra magia abita soprattutto nelle cose semplici.' },
@@ -598,18 +630,48 @@
         { q: 'Quale palette racconta meglio il vostro “noi”?', a: ['Solo rosa', 'Solo blu', 'Rosa, marrone, blu e nero: due mondi che si incontrano'], correct: 2, ok: 'La risposta più bella: due mondi diversi, una storia condivisa.' }
       ];
 
+      const defaultFinal = {
+        heading: 'Alexandra, sei casa.',
+        paragraphOne: 'Grazie per questi diciotto mesi: per i viaggi estivi, per le risate, per i momenti semplici e per tutto quello che riusciamo a costruire anche senza accorgercene. Mi piace la nostra storia perché è vera, nostra e ancora tutta da scrivere.',
+        paragraphTwo: 'Ti amo, e sceglierei te — in ogni versione del tempo, in ogni viaggio, in ogni mese che verrà.',
+        signature: 'Kimberly'
+      };
+
       const deepCopy = (value) => JSON.parse(JSON.stringify(value));
-      const defaultState = () => ({ months: defaultMonths.map(([title, memory, dedication]) => ({ title, memory, dedication, photo: '' })), trips: deepCopy(defaultTrips).map(t => ({ ...t, photo: '' })), theme: 'shared' });
+      const defaultState = () => {
+        const builtins = window.LETTER_DEFAULTS || {};
+        const months = builtins.months || defaultMonths.map(([title, memory, dedication]) => ({ title, memory, dedication, photo: '' }));
+        const trips = builtins.trips || defaultTrips;
+        return { months: deepCopy(months).map((month, index) => ({ ...month, photo: GITHUB_MONTH_PHOTOS[index] || month.photo || '' })), trips: deepCopy(trips).map((trip, index) => ({ ...trip, photo: GITHUB_TRIP_PHOTOS[index] || trip.photo || '' })), reasons: deepCopy(builtins.reasons || reasons), memories: deepCopy(builtins.memories || memories), final: deepCopy(builtins.final || defaultFinal), theme: 'shared' };
+      };
       let state;
-      try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState(); } catch (_) { state = defaultState(); }
+      try { state = GITHUB_MODE ? defaultState() : (JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultState()); } catch (_) { state = defaultState(); }
       if (!state.months || state.months.length !== 18) state.months = defaultState().months;
       if (!state.trips || state.trips.length !== 2) state.trips = defaultState().trips;
 
       const $ = (selector, root = document) => root.querySelector(selector);
       const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
       const escapeHTML = (value = '') => String(value).replace(/[&<>'"]/g, character => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[character]);
-      const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const save = (nextState = state) => { if (!GITHUB_MODE) localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState)); };
       const toast = (message) => { const el = $('#toast'); el.textContent = message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer = setTimeout(() => el.classList.remove('show'), 3200); };
+      function renderFinal() {
+        const content = { ...defaultFinal, ...(state.final || {}) };
+        $('#finalHeading').textContent = content.heading;
+        $('#finalParagraphOne').textContent = content.paragraphOne;
+        $('#finalParagraphTwo').textContent = content.paragraphTwo;
+        $('#finalSignature').innerHTML = `Con tutto il mio amore,<br><strong>${escapeHTML(content.signature)}</strong>`;
+      }
+      async function loadSharedContent() {
+        if (!supabaseClient) return;
+        try {
+          const { data, error } = await supabaseClient.from('site_content').select('content').eq('id', 'main').maybeSingle();
+          if (error) throw error;
+          if (data?.content) state = { ...state, ...data.content, final: { ...defaultFinal, ...(data.content.final || {}) } };
+          renderMonths(); renderTrips(); renderReasons(); renderFinal();
+        } catch (error) {
+          console.warn('Contenuti condivisi non ancora disponibili:', error.message);
+        }
+      }
 
       function renderMonths() {
         $('#monthsGrid').innerHTML = state.months.map((month, index) => `
@@ -647,7 +709,8 @@
       }
 
       function renderReasons() {
-        $('#reasonsGrid').innerHTML = reasons.map((reason, index) => `<button class="reason-card" type="button" data-reason="${index}"><span class="number">${String(index + 1).padStart(2, '0')} / 18</span><span class="reason-cover">Tocca per scoprire<br>un motivo ♥</span><p>${escapeHTML(reason)}</p></button>`).join('');
+        const visibleReasons = Array.isArray(state.reasons) && state.reasons.length ? state.reasons : reasons;
+        $('#reasonsGrid').innerHTML = visibleReasons.map((reason, index) => `<button class="reason-card" type="button" data-reason="${index}"><span class="number">${String(index + 1).padStart(2, '0')} / 18</span><span class="reason-cover">Tocca per scoprire<br>un motivo ♥</span><p>${escapeHTML(reason)}</p></button>`).join('');
         $$('.reason-card').forEach(card => card.addEventListener('click', () => { card.classList.toggle('is-open'); toast(card.classList.contains('is-open') ? 'Motivo sbloccato ♥' : 'Motivo nascosto'); }));
       }
 
@@ -695,7 +758,7 @@
       $('#puzzleUpload').addEventListener('change', event => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { puzzleImage = reader.result; legalShuffle(); renderPuzzle(); $('#puzzleStatus').textContent = 'Ora ricomponi la vostra foto.'; }; reader.readAsDataURL(file); });
 
       $$('.track').forEach(track => track.addEventListener('click', () => track.classList.toggle('open')));
-      $('#drawMemory').addEventListener('click', () => { $('#drawnMemory').textContent = memories[Math.floor(Math.random() * memories.length)]; });
+      $('#drawMemory').addEventListener('click', () => { const visibleMemories = Array.isArray(state.memories) && state.memories.length ? state.memories : memories; $('#drawnMemory').textContent = visibleMemories[Math.floor(Math.random() * visibleMemories.length)]; });
       $('#addTodayMemory').addEventListener('click', () => { const message = prompt('Scrivi un pensiero da conservare per oggi:'); if (message && message.trim()) { $('#drawnMemory').textContent = message.trim(); toast('Il messaggio è entrato nel barattolo ♥'); } });
 
       function initScratchCards() { $$('.scratch-card').forEach(card => { const canvas = $('.scratch-canvas', card); const context = canvas.getContext('2d'); const resize = () => { const ratio = window.devicePixelRatio || 1; const rect = card.getBoundingClientRect(); canvas.width = rect.width * ratio; canvas.height = rect.height * ratio; context.setTransform(ratio, 0, 0, ratio, 0, 0); context.globalCompositeOperation = 'source-over'; context.fillStyle = '#a76d7d'; context.fillRect(0, 0, rect.width, rect.height); context.fillStyle = 'rgba(255,238,242,.35)'; for (let x = -rect.height; x < rect.width + rect.height; x += 18) { context.save(); context.translate(x, 0); context.rotate(-.45); context.fillRect(0, 0, 8, rect.height * 2); context.restore(); } }; resize(); let strokes = 0; const scratch = event => { const rect = canvas.getBoundingClientRect(); const x = event.clientX - rect.left; const y = event.clientY - rect.top; context.globalCompositeOperation = 'destination-out'; context.beginPath(); context.arc(x, y, 21, 0, Math.PI * 2); context.fill(); strokes++; if (strokes > 22) { canvas.style.opacity = '0'; canvas.style.pointerEvents = 'none'; } }; canvas.addEventListener('pointerdown', event => { canvas.setPointerCapture(event.pointerId); scratch(event); }); canvas.addEventListener('pointermove', event => { if (event.buttons) scratch(event); }); }); }
@@ -713,7 +776,9 @@
       $('#openLetter').addEventListener('click', () => { $('#introScreen').classList.add('is-open'); document.body.style.overflow = ''; setTimeout(() => $('#hero').focus?.(), 500); });
       window.addEventListener('scroll', () => { const scrollable = document.documentElement.scrollHeight - window.innerHeight; $('#scrollProgress').style.width = `${scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0}%`; });
 
-      renderMonths(); renderTrips(); renderReasons(); renderQuiz(); legalShuffle(); renderPuzzle(); initScratchCards(); applyTheme();
+      document.body.classList.toggle('github-mode', GITHUB_MODE);
+      renderMonths(); renderTrips(); renderReasons(); renderFinal(); renderQuiz(); legalShuffle(); renderPuzzle(); initScratchCards(); applyTheme();
+      loadSharedContent();
     })();
   </script>
 </body>
